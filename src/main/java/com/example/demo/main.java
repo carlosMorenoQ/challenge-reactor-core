@@ -13,7 +13,6 @@ public class main {
     public static void main(String[] args) {
 
 /*
-
         //Jugadores con edad mayor a 34
         System.out.println("Jugadores con edad mayor a 34");
         CsvUtilFile.getPlayers().stream()
@@ -28,12 +27,12 @@ public class main {
                 .filter(player -> Objects.equals(player.getClub(), club))
                 .map(Player::getName)
                 .forEach(System.out::println);
-
 */
 
         //nacionalidades de los jugadores
-//        CsvUtilFile.getPlayers().stream().map(Player::getNational).forEach(System.out::println);
+        CsvUtilFile.getPlayers().stream().map(Player::getNational).distinct().forEach(System.out::println);
 
+/*
 
         //Ranquin de los jugadores
         paises().forEach(pais-> CsvUtilFile.getPlayers().stream()
@@ -41,6 +40,7 @@ public class main {
        .sorted(Comparator.comparingInt(Player::getWinners))
        .forEach(player -> System.out.println(pais + ": Jugador, " + player.getName() +
                ", Victorias, " + player.getWinners() )));
+*/
 
 
     }
