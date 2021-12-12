@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.repository;
 
+import com.example.demo.model.Player;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
@@ -10,12 +11,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class CsvUtilFile {
+
     private CsvUtilFile(){}
 
     public static List<Player> getPlayers(){
-        var uri =  CsvUtilFile.class.getClassLoader().getResource("data.csv");
+//        var uri =  CsvUtilFile.class.getClassLoader().getResource("data.csv");
         List<Player> list = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader(uri.getFile()))) {
+        try (CSVReader reader = new CSVReader(new FileReader("data.csv"))) {
             List<String[]> registers = reader.readAll();
             registers.forEach(strings -> list.add(new Player(
                     Integer.parseInt(strings[0].trim()),
@@ -31,6 +33,7 @@ public class CsvUtilFile {
            return list;
 
         } catch (IOException | CsvException e) {
+            System.out.println("Entro al error");
             throw new IllegalArgumentException(e.getMessage());
         }
     }
