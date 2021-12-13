@@ -1,6 +1,12 @@
 package com.example.demo.model;
 
-public class Player {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+public class Player implements Comparable<Player> {
+
+    @Id
     public int id;
     public String name;
     public int age;
@@ -89,10 +95,9 @@ public class Player {
     }
 
     @Override
-    public String toString() {
-        return "Player{" +
-                "name='" + name + '\'' +
-                ", winners=" + winners +
-                '}';
+    public int compareTo(Player o) {
+        if((o.getWinners() - o.getGames())<0) return -1;
+        else if((o.getWinners() - o.getGames()) == o.getWinners()) return 0;
+        else  return 1;
     }
 }
