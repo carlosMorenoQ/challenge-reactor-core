@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.example.demo.utilities;
 
 import com.example.demo.model.Player;
 import com.opencsv.CSVReader;

@@ -11,7 +11,6 @@ public class Player {
     public String club;
 
     public Player(){
-
     }
 
     public Player(int id, String name, int age, String icon, String national, int winners, int games, String club) {
@@ -87,5 +86,13 @@ public class Player {
 
     public void setClub(String club) {
         this.club = club;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", winners=" + winners +
+                '}';
     }
 }
