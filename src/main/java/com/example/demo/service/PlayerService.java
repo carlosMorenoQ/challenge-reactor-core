@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Player;
 import com.example.demo.repository.PlayerRepository;
+import com.example.demo.utilities.CsvUtilFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -16,30 +17,35 @@ public class PlayerService {
     @Autowired
     PlayerRepository playerRepository;
 
-    public Flux<Player> getPlayers(){
-        return  playerRepository.findAll()
+    public Flux<Player> saveAllFromCSV() {
+        Flux<Player> list = Flux.fromIterable(CsvUtilFile.getPlayers());
+        return playerRepository.saveAll(list);
+    }
+
+    public Flux<Player> getPlayers() {
+        return playerRepository.findAll()
                 .buffer(150)
                 .flatMap(Flux::fromIterable);
     }
 
-    public Flux<Player> getPlayersOver34(){
+    public Flux<Player> getPlayersOver34() {
         return getPlayers()
-                .filter(player -> player.getAge()>34);
+                .filter(player -> player.getAge() > 34);
     }
 
-    public Flux<Player> getPlayersByClub(String club){
+    public Flux<Player> getPlayersByClub(String club) {
         return getPlayers()
                 .filter(player -> player.getClub().equals(club));
     }
 
 
-    public Flux<String>getNacionalities(){
+    public Flux<String> getNacionalities() {
         return getPlayers()
                 .map(Player::getNational)
                 .distinct();
     }
 
-    public Flux<List<Player>> getRankingPlayers(){
+    public Flux<List<Player>> getRankingPlayers() {
         return getPlayers()
                 .groupBy(Player::getNational)
                 .flatMap(Flux::collectList)
