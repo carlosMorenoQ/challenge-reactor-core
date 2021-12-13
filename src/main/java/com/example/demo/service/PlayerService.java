@@ -9,7 +9,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PlayerService {
@@ -18,7 +17,9 @@ public class PlayerService {
     PlayerRepository playerRepository;
 
     public Flux<Player> saveAllFromCSV() {
-        Flux<Player> list = Flux.fromIterable(CsvUtilFile.getPlayers());
+        Flux<Player> list = Flux.fromIterable(CsvUtilFile.getPlayers())
+                .buffer(150)
+                .flatMap(Flux::fromIterable);
         return playerRepository.saveAll(list);
     }
 
@@ -39,10 +40,11 @@ public class PlayerService {
     }
 
 
-    public Flux<String> getNacionalities() {
+    public Mono<List<String>> getNacionalities() {
         return getPlayers()
                 .map(Player::getNational)
-                .distinct();
+                .distinct()
+                .collectList();
     }
 
     public Flux<List<Player>> getRankingPlayers() {

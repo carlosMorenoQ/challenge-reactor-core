@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -17,12 +20,21 @@ public class PlayerController {
     @Autowired
     PlayerService playerService;
 
-    @GetMapping(value = "/pasarRegistros")
-    public Flux<Player> saveAllCsc (){
-        return playerService.saveAllFromCSV();
+    @GetMapping(value = "/saveAllPlayersFromCsv")
+    public Flux<Player> saveAllPlayersFromCsv(){
+        return playerService.saveAllFromCSV()
+                .buffer(150)
+                .flatMap(Flux::fromIterable);
     }
 
+    @GetMapping(value = "/playersOver34")
+    public Flux<Player> getPlayersOver34(){
+        return playerService.getPlayersOver34();
+    }
 
-
+    @GetMapping(value = "/playersNacionalities")
+    public Mono<List<String>> playersNacionalities(){
+        return playerService.getNacionalities();
+    }
 
 }
